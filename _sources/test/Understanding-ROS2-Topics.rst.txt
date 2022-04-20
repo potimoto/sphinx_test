@@ -51,7 +51,7 @@ Open a new terminal and run:
 
     ros2 run turtlebot3_teleop teleop_keyboard
 
-Recall from the :doc:`previous tutorial <./Understanding-ROS2-Nodes>`that the names of these nodes are ``/teleop_turtle`` by default.
+Recall from the :doc:`previous tutorial <./Understanding-ROS2-Nodes>` that the names of these nodes are ``/teleop_turtle`` by default.
 
 
 2 rqt_graph
@@ -290,4 +290,4 @@ You should now have a good idea of how data moves around a ROS 2 system.
 Next steps
 ----------
 
-Next you'll learn about another communication type in the ROS graph with the tutorial `../Understanding-ROS2-Services`
+Next you'll learn about another communication type in the ROS graph with the tutorial :doc:`./Understanding-ROS2-Services`

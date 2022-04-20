@@ -356,12 +356,13 @@ After running the previous command, the turtle will already be at the orientatio
 
 .. code-block:: console
 
-    ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose "pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}"
+  ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose "pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}"
  --feedback
 
 Your terminal will return the message:
 
 .. code-block:: console
+
     Feedback:
       current_pose:
     header:

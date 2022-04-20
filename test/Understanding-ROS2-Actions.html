@@ -385,11 +385,35 @@ The last section is the structure of the feedback.</p>
 <p>To see the feedback of this goal, add <code class="docutils literal notranslate"><span class="pre">--feedback</span></code> to the last command you ran.
 First, make sure you change the value of <code class="docutils literal notranslate"><span class="pre">theta</span></code>.
 After running the previous command, the turtle will already be at the orientation of <code class="docutils literal notranslate"><span class="pre">1.57</span></code> radians, so it won’t move unless you pass a new <code class="docutils literal notranslate"><span class="pre">theta</span></code>.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">   ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose &quot;pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}&quot;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose &quot;pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}&quot;</span>
 <span class="go">--feedback</span>
 </pre></div>
 </div>
 <p>Your terminal will return the message:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Feedback:</span>
+<span class="go">  current_pose:</span>
+<span class="go">header:</span>
+<span class="go">  stamp:</span>
+<span class="go">    sec: 3593</span>
+<span class="go">    nanosec: 392000000</span>
+<span class="go">  frame_id: map</span>
+<span class="go">pose:</span>
+<span class="go">  position:</span>
+<span class="go">    x: 0.9404635318738738</span>
+<span class="go">    y: -0.11579111067382131</span>
+<span class="go">    z: 0.011377294247744273</span>
+<span class="go">  orientation:</span>
+<span class="go">    x: 0.00019422627776279693</span>
+<span class="go">    y: 1.0885388347429731e-05</span>
+<span class="go">    z: -0.09437272167311778</span>
+<span class="go">    w: 0.9955369162224321</span>
+<span class="go">navigation_time:</span>
+<span class="go">  sec: 9</span>
+<span class="go">  nanosec: 224000000</span>
+<span class="go">number_of_recoveries: 0</span>
+<span class="go">distance_remaining: 1.0659054517745972</span>
+</pre></div>
+</div>
 <p>It continues to receive the remaining distance until the goal is completed.</p>
 </section>
 </section>
