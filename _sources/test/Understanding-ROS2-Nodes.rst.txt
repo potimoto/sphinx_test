@@ -195,4 +195,4 @@ Topics are one of the communication types that connects nodes.
 Related content
 ---------------
 
-The :doc:`../Concepts` page adds some more detail to the concept of nodes.
+The `Concepts <https://docs.ros.org/en/foxy/Concepts.html>`_ page adds some more detail to the concept of nodes.

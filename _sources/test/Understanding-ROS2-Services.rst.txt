@@ -27,7 +27,7 @@ While topics allow nodes to subscribe to data streams and get continual updates,
 Prerequisites
 -------------
 
-Some concepts mentioned in this tutorial, like :doc:`nodes <../Understanding-ROS2-Nodes>` and :doc:`topics <../Topics/Understanding-ROS2-Topics>`, were covered in previous tutorials in the series.
+Some concepts mentioned in this tutorial, like :doc:`nodes <./Understanding-ROS2-Nodes>` and :doc:`topics <./Understanding-ROS2-Topics>`, were covered in previous tutorials in the series.
 
 As always, don’t forget to source ROS 2 in `every new terminal you open <https://docs.ros.org/en/foxy/Tutorials/Configuring-ROS2-Environment.html>`_.
 
@@ -219,7 +219,7 @@ In this tutorial you used command line tools to identify, elaborate on, and call
 Next steps
 ----------
 
-In the next tutorial, :doc:`../Parameters/Understanding-ROS2-Parameters`, you will learn about configuring node settings.
+In the next tutorial, :doc:`./Understanding-ROS2-Parameters`, you will learn about configuring node settings.
 
 Related content
 ---------------

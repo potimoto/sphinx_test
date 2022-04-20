@@ -31,7 +31,7 @@ Topics are one of the main ways in which data is moved between nodes and therefo
 Prerequisites
 -------------
 
-The :doc:`previous tutorial <./ Understanding-ROS2-Nodes>` provides some useful background information on nodes that is built upon here.
+The :doc:`previous tutorial <./Understanding-ROS2-Nodes>` provides some useful background information on nodes that is built upon here.
 
 As always, don’t forget to source ROS 2 in `every new terminal you open <https://docs.ros.org/en/foxy/Tutorials/Configuring-ROS2-Environment.html>`_.
 
@@ -51,7 +51,7 @@ Open a new terminal and run:
 
     ros2 run turtlebot3_teleop teleop_keyboard
 
-Recall from the :doc:`previous tutorial <./ Understanding-ROS2-Nodes>`that the names of these nodes are ``/teleop_turtle`` by default.
+Recall from the :doc:`previous tutorial <./Understanding-ROS2-Nodes>`that the names of these nodes are ``/teleop_turtle`` by default.
 
 
 2 rqt_graph
