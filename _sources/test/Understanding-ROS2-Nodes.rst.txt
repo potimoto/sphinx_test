@@ -1,0 +1,198 @@
+.. _ROS2Nodes:
+
+Understanding ROS 2 nodes
+=========================
+
+**Goal:** Learn about the function of nodes in ROS 2, and the tools to interact with them.
+
+**Tutorial level:** Beginner
+
+**Time:** 10 minutes
+
+.. contents:: Contents
+   :depth: 2
+   :local:
+
+Background
+----------
+
+1 The ROS 2 graph
+^^^^^^^^^^^^^^^^^
+
+Over the next few tutorials, you will learn about a series of core ROS 2 concepts that make up what is referred to as the “ROS (2) graph”.
+
+The ROS graph is a network of ROS 2 elements processing data together at one time.
+It encompasses all executables and the connections between them if you were to map them all out and visualize them.
+
+2 Nodes in ROS 2
+^^^^^^^^^^^^^^^^
+
+Each node in ROS should be responsible for a single, module purpose (e.g. one node for controlling wheel motors, one node for controlling a laser range-finder, etc).
+Each node can send and receive data to other nodes via topics, services, actions, or parameters.
+
+.. image:: src/Nodes-TopicandService.gif
+
+A full robotic system is comprised of many nodes working in concert.
+In ROS 2, a single executable (C++ program, Python program, etc.) can contain one or more nodes.
+
+Prerequisites
+-------------
+
+To learn this tutorial, you will need to complete the `setup of turtlebot3`_.
+
+.. _setup of turtlebot3: https://emanual.robotis.com/docs/en/platform/turtlebot3/quick-start
+
+As always, don’t forget to source ROS 2 in `every new terminal you open <https://docs.ros.org/en/foxy/Tutorials/Configuring-ROS2-Environment.html>`_.
+
+In addition, do not forget to run `bringup <https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup>`_.
+
+Tasks
+-----
+
+1 ros2 run
+^^^^^^^^^^
+
+The command ``ros2 run`` launches an executable from a package.
+
+.. code-block:: console
+
+    ros2 run <package_name> <executable_name>
+
+To run turtlebot3 teleoperation, open a new terminal, and enter the following command:
+
+.. code-block:: console
+
+    ros2 run turtlebot3_teleop teleop_keyboard
+
+A teleoperation form will appear in the terminal window.
+
+Here, the package name is ``turtlebot3_teleop`` and the executable name is ``teleop_keyboard``.
+
+There may be multiple executables in the same package.
+
+We still don’t know the node name, however.
+You can find node names by using ``ros2 node list``
+
+2 ros2 node list
+^^^^^^^^^^^^^^^^
+
+``ros2 node list`` will show you the names of all running nodes.
+This is especially useful when you want to interact with a node, or when you have a system running many nodes and need to keep track of them.
+
+Open a new terminal while turtlebot3_teleop is still running in the other one, and enter the following command:
+
+.. code-block:: console
+
+    ros2 node list
+
+The terminal will return the node name:
+
+.. code-block:: console
+
+  /diff_drive_controller
+  /hlds_laser_publisher
+  /robot_state_publisher
+  /teleop_keyboard
+  /turtlebot3_node
+
+2.1 Remapping
+~~~~~~~~~~~~~
+
+`Remapping <https://design.ros2.org/articles/ros_command_line_arguments.html#name-remapping-rules>`__ allows you to reassign default node properties, like node name, topic names, service names, etc., to custom values.
+
+Now, lets reassign the name of our ``/teleop_keyboard`` node.
+In a new terminal, run the following command:
+
+.. code-block:: console
+
+  ros2 run turtlebot3_teleop teleop_keyboard --ros-args --remap __node:=my_turtlebot3_teleop
+
+Since you’re calling ``ros2 run`` on turtlebot3_teleop again, another teleoperation window will open.
+However, now if you return to the terminal where you ran ``ros2 node list``, and run it again, you will see six node names:
+
+.. code-block:: console
+
+  /diff_drive_controller
+  /hlds_laser_publisher
+  /my_turtlebot3_teleop
+  /robot_state_publisher
+  /teleop_keyboard
+  /turtlebot3_node
+
+3 ros2 node info
+^^^^^^^^^^^^^^^^
+
+Now that you know the names of your nodes, you can access more information about them with:
+
+.. code-block:: console
+
+    ros2 node info <node_name>
+
+To examine your turtlebot3 node, ``turtlebot3_node``, run the following command:
+
+.. code-block:: console
+
+    ros2 node info /turtlebot3_node
+
+``ros2 node info`` returns a list of subscribers, publishers, services, and actions (the ROS graph connections) that interact with that node.
+The output should look like this:
+
+.. code-block:: console
+
+  /turtlebot3_node
+  Subscribers:
+    /cmd_vel: geometry_msgs/msg/Twist
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+  Publishers:
+    /battery_state: sensor_msgs/msg/BatteryState
+    /imu: sensor_msgs/msg/Imu
+    /joint_states: sensor_msgs/msg/JointState
+    /magnetic_field: sensor_msgs/msg/MagneticField
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /rosout: rcl_interfaces/msg/Log
+    /sensor_state: turtlebot3_msgs/msg/SensorState
+  Service Servers:
+    /motor_power: std_srvs/srv/SetBool
+    /reset: std_srvs/srv/Trigger
+    /sound: turtlebot3_msgs/srv/Sound
+    /turtlebot3_node/describe_parameters: rcl_interfaces/srv/DescribeParameters
+    /turtlebot3_node/get_parameter_types: rcl_interfaces/srv/GetParameterTypes
+    /turtlebot3_node/get_parameters: rcl_interfaces/srv/GetParameters
+    /turtlebot3_node/list_parameters: rcl_interfaces/srv/ListParameters
+    /turtlebot3_node/set_parameters: rcl_interfaces/srv/SetParameters
+    /turtlebot3_node/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically
+  Service Clients:
+    /turtlebot3_node/describe_parameters: rcl_interfaces/srv/DescribeParameters
+    /turtlebot3_node/get_parameter_types: rcl_interfaces/srv/GetParameterTypes
+    /turtlebot3_node/get_parameters: rcl_interfaces/srv/GetParameters
+    /turtlebot3_node/list_parameters: rcl_interfaces/srv/ListParameters
+    /turtlebot3_node/set_parameters: rcl_interfaces/srv/SetParameters
+    /turtlebot3_node/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically
+  Action Servers:
+
+  Action Clients:
+
+Now try running the same command on the ``/teleop_keyboard`` node, and see how its connections differ from ``turtlebot3_node``.
+
+You will learn more about the ROS graph connection concepts including the message types in the upcoming tutorials.
+
+Summary
+-------
+
+A node is a fundamental ROS 2 element that serves a single, modular purpose in a robotics system.
+
+In this tutorial, you utilized nodes created from the ``turtlebot3_teleop`` package by running the executables ``teleop_keyboard``.
+
+You learned how to use ``ros2 node list`` to discover active node names and ``ros2 node info`` to introspect on a single node.
+These tools are vital to understanding the flow of data in a complex, real-world robot system.
+
+Next steps
+----------
+
+Now that you understand nodes in ROS 2, you can move on to the :doc:`topics tutorial <./Understanding-ROS2-Topics>`.
+Topics are one of the communication types that connects nodes.
+
+Related content
+---------------
+
+The :doc:`../Concepts` page adds some more detail to the concept of nodes.

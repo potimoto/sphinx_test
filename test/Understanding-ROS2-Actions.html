@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Understanding ROS 2 actions &#8212; ros2-tutorial-using-turtlebot3 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="understanding-ros-2-actions">
+<span id="ros2actions"></span><h1>Understanding ROS 2 actions<a class="headerlink" href="#understanding-ros-2-actions" title="Permalink to this headline">¶</a></h1>
+<p><strong>Goal:</strong> Introspect actions in ROS 2.</p>
+<p><strong>Tutorial level:</strong> Beginner</p>
+<p><strong>Time:</strong> 15 minutes</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#background" id="id1">Background</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id2">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#tasks" id="id3">Tasks</a></p>
+<ul>
+<li><p><a class="reference internal" href="#setup" id="id4">1 Setup</a></p></li>
+<li><p><a class="reference internal" href="#use-actions" id="id5">2 Use actions</a></p></li>
+<li><p><a class="reference internal" href="#ros2-node-info" id="id6">3 ros2 node info</a></p></li>
+<li><p><a class="reference internal" href="#ros2-action-list" id="id7">4 ros2 action list</a></p></li>
+<li><p><a class="reference internal" href="#ros2-action-info" id="id8">5 ros2 action info</a></p></li>
+<li><p><a class="reference internal" href="#ros2-interface-show" id="id9">6 ros2 interface show</a></p></li>
+<li><p><a class="reference internal" href="#ros2-action-send-goal" id="id10">7 ros2 action send_goal</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#summary" id="id11">Summary</a></p></li>
+<li><p><a class="reference internal" href="#next-steps" id="id12">Next steps</a></p></li>
+<li><p><a class="reference internal" href="#related-content" id="id13">Related content</a></p></li>
+</ul>
+</div>
+<section id="background">
+<h2><a class="toc-backref" href="#id1">Background</a><a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>Actions are one of the communication types in ROS 2 and are intended for long running tasks.
+They consist of three parts: a goal, feedback, and a result.</p>
+<p>Actions are built on topics and services.
+Their functionality is similar to services, except actions are preemptable (you can cancel them while executing).
+They also provide steady feedback, as opposed to services which return a single response.</p>
+<p>Actions use a client-server model, similar to the publisher-subscriber model (described in the <span class="xref std std-doc">topics tutorial</span>).
+An “action client” node sends a goal to an “action server” node that acknowledges the goal and returns a stream of feedback and a result.</p>
+<img alt="../_images/Action-SingleActionClient.gif" src="../_images/Action-SingleActionClient.gif" />
+</section>
+<section id="prerequisites">
+<h2><a class="toc-backref" href="#id2">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>This tutorial builds off concepts, like <a class="reference internal" href="Understanding-ROS2-Nodes.html"><span class="doc">nodes</span></a> and <span class="xref std std-doc">topics</span>, covered in previous tutorials.</p>
+<p>This tutorial assumes that you have already completed the <a class="reference external" href="https://emanual.robotis.com/docs/en/platform/turtlebot3/navigation/#run-navigation-nodes">navigation</a> tutorial.</p>
+<p>As always, don’t forget to source ROS 2 in <a class="reference external" href="https://docs.ros.org/en/foxy/Tutorials/Configuring-ROS2-Environment.html">every new terminal you open</a>.</p>
+<p>In addition, do not forget to run <a class="reference external" href="https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup">bringup</a>.</p>
+</section>
+<section id="tasks">
+<h2><a class="toc-backref" href="#id3">Tasks</a><a class="headerlink" href="#tasks" title="Permalink to this headline">¶</a></h2>
+<section id="setup">
+<h3><a class="toc-backref" href="#id4">1 Setup</a><a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
+<p>Start a navegation node by referring to the map created by turtlebot3.</p>
+<p>Open a new terminal and run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 launch turtlebot3_navigation2 navigation2.launch.py map:=$HOME/map.yaml</span>
+</pre></div>
+</div>
+<p>Then, after manipulating the Rviz2 menu for the initial pose estimation, the turtlebot3 node <code class="docutils literal notranslate"><span class="pre">/teleop_keyboard</span></code> is start.</p>
+<p>Open a new terminal and run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 run turtlebot3_teleop teleop_keyboard</span>
+</pre></div>
+</div>
+<p>Then, complete the steps up to section 5.2 of the navigation tutorial before proceeding to the following.</p>
+</section>
+<section id="use-actions">
+<h3><a class="toc-backref" href="#id5">2 Use actions</a><a class="headerlink" href="#use-actions" title="Permalink to this headline">¶</a></h3>
+<p>Operate Rviz2 to set the goal, you will see the following message in your terminal:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[rviz2-10] Start navigation</span>
+<span class="go">...</span>
+<span class="go">[controller_server-4] [INFO] [1649992440.333798538] [controller_server]: Received a goal, begin computing control effort.</span>
+</pre></div>
+</div>
+<p>When navigation is complete, You will see the following message in your terminal:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[controller_server-4] [INFO] [1650356892.407224026] [controller_server]: Passing new path to controller.</span>
+<span class="go">[controller_server-4] [INFO] [1650356893.017389446] [controller_server]: Reached the goal!</span>
+<span class="go">[bt_navigator-7] [INFO] [1650356893.056122337] [bt_navigator]: Navigation succeeded</span>
+</pre></div>
+</div>
+<p>If the Cancel button is pressed in Rviz2 while navigation is in progress, you will see the message:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[ActionServer] Client requested to cancel the goal. Cancelling.</span>
+</pre></div>
+</div>
+<p>If for some reason you are unable to complete navigation, you will see the message:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[bt_navigator-7] [ERROR] [1649992599.582101927] [bt_navigator]: Navigation failed</span>
+</pre></div>
+</div>
+</section>
+<section id="ros2-node-info">
+<h3><a class="toc-backref" href="#id6">3 ros2 node info</a><a class="headerlink" href="#ros2-node-info" title="Permalink to this headline">¶</a></h3>
+<p>To see the <code class="docutils literal notranslate"><span class="pre">/bt_navigator</span></code> node’s actions, open a new terminal and run the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 node info /bt_navigator</span>
+</pre></div>
+</div>
+<p>Which will return a list of <code class="docutils literal notranslate"><span class="pre">/bt_navigator</span></code>’s subscribers, publishers, services, action servers and action clients:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/bt_navigator</span>
+<span class="go">Subscribers:</span>
+<span class="go">  /clock: rosgraph_msgs/msg/Clock</span>
+<span class="go">  /goal_pose: geometry_msgs/msg/PoseStamped</span>
+<span class="go">  /parameter_events: rcl_interfaces/msg/ParameterEvent</span>
+<span class="go">  /tf: tf2_msgs/msg/TFMessage</span>
+<span class="go">  /tf_static: tf2_msgs/msg/TFMessage</span>
+<span class="go">Publishers:</span>
+<span class="go">  /bt_navigator/transition_event: lifecycle_msgs/msg/TransitionEvent</span>
+<span class="go">  /parameter_events: rcl_interfaces/msg/ParameterEvent</span>
+<span class="go">  /rosout: rcl_interfaces/msg/Log</span>
+<span class="go">Service Servers:</span>
+<span class="go">  /bt_navigator/change_state: lifecycle_msgs/srv/ChangeState</span>
+<span class="go">  /bt_navigator/describe_parameters: rcl_interfaces/srv/DescribeParameters</span>
+<span class="go">  /bt_navigator/get_available_states: lifecycle_msgs/srv/GetAvailableStates</span>
+<span class="go">  /bt_navigator/get_available_transitions: lifecycle_msgs/srv/GetAvailableTransitions</span>
+<span class="go">  /bt_navigator/get_parameter_types: rcl_interfaces/srv/GetParameterTypes</span>
+<span class="go">  /bt_navigator/get_parameters: rcl_interfaces/srv/GetParameters</span>
+<span class="go">  /bt_navigator/get_state: lifecycle_msgs/srv/GetState</span>
+<span class="go">  /bt_navigator/get_transition_graph: lifecycle_msgs/srv/GetAvailableTransitions</span>
+<span class="go">  /bt_navigator/list_parameters: rcl_interfaces/srv/ListParameters</span>
+<span class="go">  /bt_navigator/set_parameters: rcl_interfaces/srv/SetParameters</span>
+<span class="go">  /bt_navigator/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically</span>
+<span class="go">Service Clients:</span>
+
+<span class="go">Action Servers:</span>
+<span class="go">  /navigate_to_pose: nav2_msgs/action/NavigateToPose</span>
+<span class="go">Action Clients:</span>
+</pre></div>
+</div>
+<p>Notice that the <code class="docutils literal notranslate"><span class="pre">/navigate_to_pose</span></code> action for <code class="docutils literal notranslate"><span class="pre">/bt_navigator</span></code> is under <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">Servers</span></code>.
+This means <code class="docutils literal notranslate"><span class="pre">/bt_navigator</span></code> responds to and provides feedback for the <code class="docutils literal notranslate"><span class="pre">/navigate_to_pose</span></code> action.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">/rviz2</span></code> node has the name <code class="docutils literal notranslate"><span class="pre">/navigate_to_pose</span></code> under <code class="docutils literal notranslate"><span class="pre">Action</span> <span class="pre">Clients</span></code> meaning that it sends goals for that action name.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 node info /rviz2</span>
+</pre></div>
+</div>
+<p>Which will return:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">There are 4 nodes in the graph with the exact name &quot;/rviz2&quot;. You are seeing information about only one of them.</span>
+<span class="go">/rviz2</span>
+<span class="go">Subscribers:</span>
+<span class="go">  /clock: rosgraph_msgs/msg/Clock</span>
+<span class="go">  /downsampled_costmap: nav_msgs/msg/OccupancyGrid</span>
+<span class="go">  /downsampled_costmap_updates: map_msgs/msg/OccupancyGridUpdate</span>
+<span class="go">  /global_costmap/costmap: nav_msgs/msg/OccupancyGrid</span>
+<span class="go">  /global_costmap/costmap_updates: map_msgs/msg/OccupancyGridUpdate</span>
+<span class="go">  /global_costmap/voxel_marked_cloud: sensor_msgs/msg/PointCloud</span>
+<span class="go">  /local_costmap/costmap: nav_msgs/msg/OccupancyGrid</span>
+<span class="go">  /local_costmap/costmap_updates: map_msgs/msg/OccupancyGridUpdate</span>
+<span class="go">  /local_costmap/published_footprint: geometry_msgs/msg/PolygonStamped</span>
+<span class="go">  /local_costmap/voxel_marked_cloud: sensor_msgs/msg/PointCloud</span>
+<span class="go">  /local_plan: nav_msgs/msg/Path</span>
+<span class="go">  /map: nav_msgs/msg/OccupancyGrid</span>
+<span class="go">  /map_updates: map_msgs/msg/OccupancyGridUpdate</span>
+<span class="go">  /mobile_base/sensors/bumper_pointcloud: sensor_msgs/msg/PointCloud2</span>
+<span class="go">  /parameter_events: rcl_interfaces/msg/ParameterEvent</span>
+<span class="go">  /particlecloud: geometry_msgs/msg/PoseArray</span>
+<span class="go">  /plan: nav_msgs/msg/Path</span>
+<span class="go">  /scan: sensor_msgs/msg/LaserScan</span>
+<span class="go">  /waypoints: visualization_msgs/msg/MarkerArray</span>
+<span class="go">Publishers:</span>
+<span class="go">  /clicked_point: geometry_msgs/msg/PointStamped</span>
+<span class="go">  /initialpose: geometry_msgs/msg/PoseWithCovarianceStamped</span>
+<span class="go">  /parameter_events: rcl_interfaces/msg/ParameterEvent</span>
+<span class="go">  /rosout: rcl_interfaces/msg/Log</span>
+<span class="go">  /waypoints: visualization_msgs/msg/MarkerArray</span>
+<span class="go">Service Servers:</span>
+<span class="go">  /rviz2/describe_parameters: rcl_interfaces/srv/DescribeParameters</span>
+<span class="go">  /rviz2/get_parameter_types: rcl_interfaces/srv/GetParameterTypes</span>
+<span class="go">  /rviz2/get_parameters: rcl_interfaces/srv/GetParameters</span>
+<span class="go">  /rviz2/list_parameters: rcl_interfaces/srv/ListParameters</span>
+<span class="go">  /rviz2/set_parameters: rcl_interfaces/srv/SetParameters</span>
+<span class="go">  /rviz2/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically</span>
+<span class="go">Service Clients:</span>
+<span class="go">  /lifecycle_manager_localization/is_active: std_srvs/srv/Trigger</span>
+<span class="go">  /lifecycle_manager_localization/manage_nodes: nav2_msgs/srv/ManageLifecycleNodes</span>
+<span class="go">  /lifecycle_manager_navigation/is_active: std_srvs/srv/Trigger</span>
+<span class="go">  /lifecycle_manager_navigation/manage_nodes: nav2_msgs/srv/ManageLifecycleNodes</span>
+<span class="go">Action Servers:</span>
+
+<span class="go">Action Clients:</span>
+<span class="go">  /FollowWaypoints: nav2_msgs/action/FollowWaypoints</span>
+<span class="go">  /navigate_to_pose: nav2_msgs/action/NavigateToPose</span>
+</pre></div>
+</div>
+</section>
+<section id="ros2-action-list">
+<h3><a class="toc-backref" href="#id7">4 ros2 action list</a><a class="headerlink" href="#ros2-action-list" title="Permalink to this headline">¶</a></h3>
+<p>To identify all the actions in the ROS graph, run the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 action list</span>
+</pre></div>
+</div>
+<p>Which will return:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/FollowWaypoints</span>
+<span class="go">/backup</span>
+<span class="go">/compute_path_to_pose</span>
+<span class="go">/follow_path</span>
+<span class="go">/navigate_to_pose</span>
+<span class="go">/spin</span>
+<span class="go">/wait</span>
+</pre></div>
+</div>
+<section id="ros2-action-list-t">
+<h4>4.1 ros2 action list -t<a class="headerlink" href="#ros2-action-list-t" title="Permalink to this headline">¶</a></h4>
+<p>Actions have types, similar to topics and services.
+To find <code class="docutils literal notranslate"><span class="pre">/navigate_to_pose</span></code>’s type, run the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 action list -t</span>
+</pre></div>
+</div>
+<p>Which will return:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/FollowWaypoints [nav2_msgs/action/FollowWaypoints]</span>
+<span class="go">/backup [nav2_msgs/action/BackUp]</span>
+<span class="go">/compute_path_to_pose [nav2_msgs/action/ComputePathToPose]</span>
+<span class="go">/follow_path [nav2_msgs/action/FollowPath]</span>
+<span class="go">/navigate_to_pose [nav2_msgs/action/NavigateToPose]</span>
+<span class="go">/spin [nav2_msgs/action/Spin]</span>
+<span class="go">/wait [nav2_msgs/action/Wait]</span>
+</pre></div>
+</div>
+<p>In brackets to the right of each action name is the action type. For example <code class="docutils literal notranslate"><span class="pre">nav2_msgs/action/NavigateToPose</span></code>.
+You will need this when you want to execute an action from the command line or from code.</p>
+</section>
+</section>
+<section id="ros2-action-info">
+<h3><a class="toc-backref" href="#id8">5 ros2 action info</a><a class="headerlink" href="#ros2-action-info" title="Permalink to this headline">¶</a></h3>
+<p>You can further introspect the <code class="docutils literal notranslate"><span class="pre">/navigate_to_pose</span></code> action with the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 action info /navigate_to_pose</span>
+</pre></div>
+</div>
+<p>Which will return</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Action: /navigate_to_pose</span>
+<span class="go">Action clients: 6</span>
+<span class="go">    /rviz2</span>
+<span class="go">    /rviz2</span>
+<span class="go">    /rviz2</span>
+<span class="go">    /rviz2</span>
+<span class="go">    /bt_navigator_rclcpp_node</span>
+<span class="go">    /waypoint_follower_rclcpp_node</span>
+<span class="go">Action servers: 1</span>
+<span class="go">    /bt_navigator</span>
+</pre></div>
+</div>
+<p>This tells us what we learned earlier from running <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">node</span> <span class="pre">info</span></code> on each node:
+The <code class="docutils literal notranslate"><span class="pre">/rviz2</span></code> node has an action client and the <code class="docutils literal notranslate"><span class="pre">/bt_navigator</span></code> node has an action server for the <code class="docutils literal notranslate"><span class="pre">/navigate_to_pose</span></code> action.</p>
+</section>
+<section id="ros2-interface-show">
+<h3><a class="toc-backref" href="#id9">6 ros2 interface show</a><a class="headerlink" href="#ros2-interface-show" title="Permalink to this headline">¶</a></h3>
+<p>One more piece of information you will need before sending or executing an action goal yourself is the structure of the action type.</p>
+<p>Recall that you identified <code class="docutils literal notranslate"><span class="pre">/navigate_to_pose</span></code>’s type when running the command <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">action</span> <span class="pre">list</span> <span class="pre">-t</span></code>.
+Enter the following command with the action type in your terminal:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 interface show nav2_msgs/action/NavigateToPose</span>
+</pre></div>
+</div>
+<p>Which will return:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>goal definition
+<span class="go">geometry_msgs/PoseStamped pose</span>
+<span class="go">string behavior_tree</span>
+<span class="go">---</span>
+<span class="gp">#</span>result definition
+<span class="go">std_msgs/Empty result</span>
+<span class="go">---</span>
+<span class="go">geometry_msgs/PoseStamped current_pose</span>
+<span class="go">builtin_interfaces/Duration navigation_time</span>
+<span class="go">int16 number_of_recoveries</span>
+<span class="go">float32 distance_remaining</span>
+</pre></div>
+</div>
+<p>The first section of this message, above the <code class="docutils literal notranslate"><span class="pre">---</span></code>, is the structure (data type and name) of the goal request.
+The next section is the structure of the result.
+The last section is the structure of the feedback.</p>
+</section>
+<section id="ros2-action-send-goal">
+<h3><a class="toc-backref" href="#id10">7 ros2 action send_goal</a><a class="headerlink" href="#ros2-action-send-goal" title="Permalink to this headline">¶</a></h3>
+<p>Now let’s send an action goal from the command line with the following syntax:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 action send_goal &lt;action_name&gt; &lt;action_type&gt; &lt;values&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;values&gt;</span></code> need to be in YAML format.</p>
+<p>Keep an eye on the turtlebot3, and enter the following command into your terminal:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose &quot;pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}&quot;</span>
+</pre></div>
+</div>
+<p>The following message will appear in the terminal and turtlebot3 will start running. (If turtlebot3 does not work, change the values of position and orientation and try again.)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Waiting for an action server to become available...</span>
+<span class="go">Sending goal:</span>
+<span class="go">     pose:</span>
+<span class="go">  header:</span>
+<span class="go">    stamp:</span>
+<span class="go">      sec: 0</span>
+<span class="go">      nanosec: 0</span>
+<span class="go">    frame_id: &#39;&#39;</span>
+<span class="go">  pose:</span>
+<span class="go">    position:</span>
+<span class="go">      x: 2.0</span>
+<span class="go">      y: 0.0</span>
+<span class="go">      z: 0.0</span>
+<span class="go">    orientation:</span>
+<span class="go">      x: 0.0</span>
+<span class="go">      y: 0.0</span>
+<span class="go">      z: 0.0</span>
+<span class="go">      w: 1.0</span>
+<span class="go">behavior_tree: &#39;&#39;</span>
+<span class="go">Goal accepted with ID: 7395d59ee4e24460a9dac979c1cf7c93</span>
+<span class="go">Result:</span>
+<span class="go">    result: {}</span>
+<span class="go">Goal finished with status: SUCCEEDED</span>
+</pre></div>
+</div>
+<p>All goals have a unique ID, shown in the return message.</p>
+<p>To see the feedback of this goal, add <code class="docutils literal notranslate"><span class="pre">--feedback</span></code> to the last command you ran.
+First, make sure you change the value of <code class="docutils literal notranslate"><span class="pre">theta</span></code>.
+After running the previous command, the turtle will already be at the orientation of <code class="docutils literal notranslate"><span class="pre">1.57</span></code> radians, so it won’t move unless you pass a new <code class="docutils literal notranslate"><span class="pre">theta</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">   ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose &quot;pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}&quot;</span>
+<span class="go">--feedback</span>
+</pre></div>
+</div>
+<p>Your terminal will return the message:</p>
+<p>It continues to receive the remaining distance until the goal is completed.</p>
+</section>
+</section>
+<section id="summary">
+<h2><a class="toc-backref" href="#id11">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Actions are like services that allow you to execute long running tasks, provide regular feedback, and are cancelable.</p>
+<p>A robot system would likely use actions for navigation.
+An action goal could tell a robot to travel to a position.
+While the robot navigates to the position, it can send updates along the way (i.e. feedback), and then a final result message once it’s reached its destination.</p>
+</section>
+<section id="next-steps">
+<h2><a class="toc-backref" href="#id12">Next steps</a><a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>Now you’ve covered all of the core ROS 2 concepts.
+The last few tutorials in the “Users” set will introduce you to some tools and techniques that will make using ROS 2 easier, starting with <span class="xref std std-doc">./Rqt-Console/Using-Rqt-Console</span>.</p>
+</section>
+<section id="related-content">
+<h2><a class="toc-backref" href="#id13">Related content</a><a class="headerlink" href="#related-content" title="Permalink to this headline">¶</a></h2>
+<p>You can read more about the design decisions behind actions in ROS 2 <a class="reference external" href="https://design.ros2.org/articles/actions.html">here</a>.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">ros2-tutorial-using-turtlebot3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, taki.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/test/Understanding-ROS2-Actions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
