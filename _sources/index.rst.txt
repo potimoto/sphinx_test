@@ -7,14 +7,11 @@ Welcome to ros2-tutorial-using-turtlebot3's documentation!
 ==========================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   test/Understanding-ROS2-Nodes
+   test/Understanding-ROS2-Topics
+   test/Understanding-ROS2-Services
+   test/Understanding-ROS2-Parameters
+   test/Understanding-ROS2-Actions
