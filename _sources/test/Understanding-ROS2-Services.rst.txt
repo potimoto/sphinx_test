@@ -104,18 +104,18 @@ To find out the type of a service, use the command:
 
   ros2 service type <service_name>
 
-Let’s take a look at turtlesim’s ``/clear`` service.
+Let’s take a look at turtlebot3’s ``/sound`` service.
 In a new terminal, enter the command:
 
 .. code-block:: console
 
-  ros2 service type /motor_power
+  ros2 service type /sound
 
 Which should return:
 
 .. code-block:: console
 
-  std_srvs/srv/SetBool
+  turtlebot3_msgs/srv/Sound
 
 3.1 ros2 service list -t
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,9 +134,8 @@ Which will return:
   /diff_drive_controller/get_parameter_types [rcl_interfaces/srv/GetParameterTypes]
   /diff_drive_controller/get_parameters [rcl_interfaces/srv/GetParameters]
   ...
-  /motor_power [std_srvs/srv/SetBool]
-  /reset [std_srvs/srv/Trigger]
-  /robot_state_publisher/describe_parameters [rcl_interfaces/srv/DescribeParameters]
+  /sound [turtlebot3_msgs/srv/Sound]
+  /teleop_keyboard/describe_parameters [rcl_interfaces/srv/DescribeParameters]
   ...
 
 4 ros2 service find
@@ -148,17 +147,17 @@ If you want to find all the services of a specific type, you can use the command
 
   ros2 service find <type_name>
 
-For example, you can find all the ``SetBool`` typed services like this:
+For example, you can find all the ``Sound`` typed services like this:
 
 .. code-block:: console
 
-  ros2 service find std_srvs/srv/SetBool
+  ros2 service find turtlebot3_msgs/srv/Sound
 
 Which will return:
 
 .. code-block:: console
 
-  /motor_power
+  /sound
 
 5 ros2 interface show
 ^^^^^^^^^^^^^^^^^^^^^
@@ -169,22 +168,32 @@ You can call services from the command line, but first you need to know the stru
 
   ros2 interface show <type_name>.srv
 
-To run this command on the ``/motor_power`` service’s type, ``SetBool``:
+To run this command on the ``/sound`` service’s type, ``Sound``:
 
 .. code-block:: console
 
-  ros2 interface show std_srvs/srv/SetBool.srv
+  ros2 interface show turtlebot3_msgs/srv/Sound.srv
 
 Which will return:
 
 .. code-block:: console
 
-  bool data # e.g. for hardware enabling / disabling
+  ########################################
+  # CONSTANTS
+  ########################################
+  # uint8 OFF           = 0
+  # uint8 ON            = 1
+  # uint8 LOW_BATTERY   = 2
+  # uint8 ERROR         = 3
+  # uint8 BUTTON1       = 4
+  # uint8 BUTTON2       = 5
+ 
+  uint8 value
   ---
-  bool success   # indicate successful run of triggered service
-  string message # informational, e.g. for error messages
+  bool success
+  string message
 
-The information above the ``---`` line tells us the arguments needed to call ``/motor_power``.
+The information above the ``---`` line tells us the arguments needed to call ``/sound``.
 
 The information below the line isn’t something you need to know in this case, but it can help you understand the data type of the response you get from the call.
 
@@ -198,13 +207,19 @@ Now that you know what a service type is, how to find a service’s type, and ho
   ros2 service call <service_name> <service_type> <arguments>
 
 The ``<arguments>`` part is optional.
-For example, you know that ``Empty`` typed services don’t have any arguments:
+For example, some services work without any arguments:
 
 .. code-block:: console
 
   ros2 service call /sound turtlebot3_msgs/srv/Sound
 
 This command causes turtlebot3 to play simple music.
+
+The ``/sound`` service changes the music it plays depending on the arguments specified:
+
+.. code-block:: console
+
+  ros2 service call /sound turtlebot3_msgs/srv/Sound "value: 1"
 
 Summary
 -------

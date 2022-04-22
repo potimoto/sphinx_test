@@ -17,7 +17,9 @@
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Understanding ROS 2 parameters" href="Understanding-ROS2-Parameters.html" />
+    <link rel="prev" title="Understanding ROS 2 topics" href="Understanding-ROS2-Topics.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -35,30 +37,34 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Understanding ROS 2 services</a><ul>
-<li><a class="reference internal" href="#background">Background</a></li>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a class="reference internal" href="#tasks">Tasks</a><ul>
-<li><a class="reference internal" href="#setup">1 Setup</a></li>
-<li><a class="reference internal" href="#ros2-service-list">2 ros2 service list</a></li>
-<li><a class="reference internal" href="#ros2-service-type">3 ros2 service type</a><ul>
-<li><a class="reference internal" href="#ros2-service-list-t">3.1 ros2 service list -t</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Understanding-ROS2-Nodes.html">Understanding ROS 2 nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Understanding-ROS2-Topics.html">Understanding ROS 2 topics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Understanding ROS 2 services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tasks">Tasks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setup">1 Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ros2-service-list">2 ros2 service list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ros2-service-type">3 ros2 service type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ros2-service-list-t">3.1 ros2 service list -t</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#ros2-service-find">4 ros2 service find</a></li>
-<li><a class="reference internal" href="#ros2-interface-show">5 ros2 interface show</a></li>
-<li><a class="reference internal" href="#ros2-service-call">6 ros2 service call</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ros2-service-find">4 ros2 service find</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ros2-interface-show">5 ros2 interface show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ros2-service-call">6 ros2 service call</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#summary">Summary</a></li>
-<li><a class="reference internal" href="#next-steps">Next steps</a></li>
-<li><a class="reference internal" href="#related-content">Related content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#related-content">Related content</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Understanding-ROS2-Parameters.html">Understanding ROS 2 parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Understanding-ROS2-Actions.html">Understanding ROS 2 actions</a></li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -183,13 +189,13 @@ Service types are defined similarly to topic types, except service types have tw
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 service type &lt;service_name&gt;</span>
 </pre></div>
 </div>
-<p>Let’s take a look at turtlesim’s <code class="docutils literal notranslate"><span class="pre">/clear</span></code> service.
+<p>Let’s take a look at turtlebot3’s <code class="docutils literal notranslate"><span class="pre">/sound</span></code> service.
 In a new terminal, enter the command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 service type /motor_power</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 service type /sound</span>
 </pre></div>
 </div>
 <p>Which should return:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">std_srvs/srv/SetBool</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">turtlebot3_msgs/srv/Sound</span>
 </pre></div>
 </div>
 <section id="ros2-service-list-t">
@@ -203,9 +209,8 @@ In a new terminal, enter the command:</p>
 <span class="go">/diff_drive_controller/get_parameter_types [rcl_interfaces/srv/GetParameterTypes]</span>
 <span class="go">/diff_drive_controller/get_parameters [rcl_interfaces/srv/GetParameters]</span>
 <span class="go">...</span>
-<span class="go">/motor_power [std_srvs/srv/SetBool]</span>
-<span class="go">/reset [std_srvs/srv/Trigger]</span>
-<span class="go">/robot_state_publisher/describe_parameters [rcl_interfaces/srv/DescribeParameters]</span>
+<span class="go">/sound [turtlebot3_msgs/srv/Sound]</span>
+<span class="go">/teleop_keyboard/describe_parameters [rcl_interfaces/srv/DescribeParameters]</span>
 <span class="go">...</span>
 </pre></div>
 </div>
@@ -217,12 +222,12 @@ In a new terminal, enter the command:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 service find &lt;type_name&gt;</span>
 </pre></div>
 </div>
-<p>For example, you can find all the <code class="docutils literal notranslate"><span class="pre">SetBool</span></code> typed services like this:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 service find std_srvs/srv/SetBool</span>
+<p>For example, you can find all the <code class="docutils literal notranslate"><span class="pre">Sound</span></code> typed services like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 service find turtlebot3_msgs/srv/Sound</span>
 </pre></div>
 </div>
 <p>Which will return:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/motor_power</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/sound</span>
 </pre></div>
 </div>
 </section>
@@ -232,18 +237,28 @@ In a new terminal, enter the command:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 interface show &lt;type_name&gt;.srv</span>
 </pre></div>
 </div>
-<p>To run this command on the <code class="docutils literal notranslate"><span class="pre">/motor_power</span></code> service’s type, <code class="docutils literal notranslate"><span class="pre">SetBool</span></code>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 interface show std_srvs/srv/SetBool.srv</span>
+<p>To run this command on the <code class="docutils literal notranslate"><span class="pre">/sound</span></code> service’s type, <code class="docutils literal notranslate"><span class="pre">Sound</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 interface show turtlebot3_msgs/srv/Sound.srv</span>
 </pre></div>
 </div>
 <p>Which will return:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">bool data # e.g. for hardware enabling / disabling</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span><span class="c1">#######################################</span>
+<span class="gp"># </span>CONSTANTS
+<span class="gp">#</span><span class="c1">#######################################</span>
+<span class="gp"># </span>uint8 <span class="nv">OFF</span>           <span class="o">=</span> <span class="m">0</span>
+<span class="gp"># </span>uint8 <span class="nv">ON</span>            <span class="o">=</span> <span class="m">1</span>
+<span class="gp"># </span>uint8 <span class="nv">LOW_BATTERY</span>   <span class="o">=</span> <span class="m">2</span>
+<span class="gp"># </span>uint8 <span class="nv">ERROR</span>         <span class="o">=</span> <span class="m">3</span>
+<span class="gp"># </span>uint8 <span class="nv">BUTTON1</span>       <span class="o">=</span> <span class="m">4</span>
+<span class="gp"># </span>uint8 <span class="nv">BUTTON2</span>       <span class="o">=</span> <span class="m">5</span>
+
+<span class="go">uint8 value</span>
 <span class="go">---</span>
-<span class="go">bool success   # indicate successful run of triggered service</span>
-<span class="go">string message # informational, e.g. for error messages</span>
+<span class="go">bool success</span>
+<span class="go">string message</span>
 </pre></div>
 </div>
-<p>The information above the <code class="docutils literal notranslate"><span class="pre">---</span></code> line tells us the arguments needed to call <code class="docutils literal notranslate"><span class="pre">/motor_power</span></code>.</p>
+<p>The information above the <code class="docutils literal notranslate"><span class="pre">---</span></code> line tells us the arguments needed to call <code class="docutils literal notranslate"><span class="pre">/sound</span></code>.</p>
 <p>The information below the line isn’t something you need to know in this case, but it can help you understand the data type of the response you get from the call.</p>
 </section>
 <section id="ros2-service-call">
@@ -253,11 +268,15 @@ In a new terminal, enter the command:</p>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">&lt;arguments&gt;</span></code> part is optional.
-For example, you know that <code class="docutils literal notranslate"><span class="pre">Empty</span></code> typed services don’t have any arguments:</p>
+For example, some services work without any arguments:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 service call /sound turtlebot3_msgs/srv/Sound</span>
 </pre></div>
 </div>
 <p>This command causes turtlebot3 to play simple music.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">/sound</span></code> service changes the music it plays depending on the arguments specified:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 service call /sound turtlebot3_msgs/srv/Sound &quot;value: 1&quot;</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="summary">
@@ -280,7 +299,10 @@ Unlike a topic - a one way communication pattern where a node publishes informat
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Understanding-ROS2-Topics.html" class="btn btn-neutral float-left" title="Understanding ROS 2 topics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Understanding-ROS2-Parameters.html" class="btn btn-neutral float-right" title="Understanding ROS 2 parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
