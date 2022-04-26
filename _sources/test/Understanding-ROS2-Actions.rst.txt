@@ -33,11 +33,11 @@ Prerequisites
 
 This tutorial builds off concepts, like :doc:`nodes <./Understanding-ROS2-Nodes>` and :doc:`topics <./Understanding-ROS2-Topics>`, covered in previous tutorials.
 
-This tutorial assumes that you have already completed the `navigation <https://emanual.robotis.com/docs/en/platform/turtlebot3/navigation/#run-navigation-nodes>`_ tutorial.
+This tutorial assumes that you have already completed the `navigation <https://emanual.robotis.com/docs/en/platform/turtlebot3/navigation/#run-navigation-nodes>`_ tutorial and have created maps in SLAM.
 
 As always, don’t forget to source ROS 2 in `every new terminal you open <https://docs.ros.org/en/foxy/Tutorials/Configuring-ROS2-Environment.html>`_.
 
-In addition, do not forget to run `bringup <https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup>`_.
+In addition, do not forget to run `bringup <https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup>`_ on Raspberry Pi (Commands other than bringup should be running on the remotePC).
 
 Tasks
 -----

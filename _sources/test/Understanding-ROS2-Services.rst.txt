@@ -31,7 +31,7 @@ Some concepts mentioned in this tutorial, like :doc:`nodes <./Understanding-ROS2
 
 As always, don’t forget to source ROS 2 in `every new terminal you open <https://docs.ros.org/en/foxy/Tutorials/Configuring-ROS2-Environment.html>`_.
 
-In addition, do not forget to run `bringup <https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup>`_.
+In addition, do not forget to run `bringup <https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup>`_ on Raspberry Pi (Commands other than bringup should be running on the remotePC).
 
 Tasks
 -----

@@ -44,7 +44,7 @@ To learn this tutorial, you will need to complete the `setup of turtlebot3`_.
 
 As always, don’t forget to source ROS 2 in `every new terminal you open <https://docs.ros.org/en/foxy/Tutorials/Configuring-ROS2-Environment.html>`_.
 
-In addition, do not forget to run `bringup <https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup>`_.
+In addition, do not forget to run `bringup <https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup>`_ on Raspberry Pi.
 
 Tasks
 -----

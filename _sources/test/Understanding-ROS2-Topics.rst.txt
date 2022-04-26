@@ -35,7 +35,7 @@ The :doc:`previous tutorial <./Understanding-ROS2-Nodes>` provides some useful b
 
 As always, don’t forget to source ROS 2 in `every new terminal you open <https://docs.ros.org/en/foxy/Tutorials/Configuring-ROS2-Environment.html>`_.
 
-In addition, do not forget to run `bringup <https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup>`_.
+In addition, do not forget to run `bringup <https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup>`_ on Raspberry Pi (Commands other than bringup should be running on the remotePC).
 
 Tasks
 -----
@@ -51,7 +51,7 @@ Open a new terminal and run:
 
     ros2 run turtlebot3_teleop teleop_keyboard
 
-Recall from the :doc:`previous tutorial <./Understanding-ROS2-Nodes>` that the names of these nodes are ``/teleop_turtle`` by default.
+Recall from the :doc:`previous tutorial <./Understanding-ROS2-Nodes>` that the names of these nodes are ``/teleop_keyboard`` by default.
 
 
 2 rqt_graph
@@ -134,7 +134,7 @@ Watch the terminal where your ``echo`` is running at the same time, and you’ll
 .. code-block:: console
 
   linear:
-    x: 0.01
+    x: 0.0
     y: 0.0
     z: 0.0
   angular:
@@ -169,6 +169,8 @@ Which will return:
   Publisher count: 1
   Subscription count: 2
 
+Because ``/roscli_2700`` and ``/turtlebot3_node`` subscribe to the ``/cmd_vel`` topic, the subscription count is 2.
+
 6 ros2 interface show
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -199,13 +201,13 @@ For the message type from above it yields:
       Vector3  linear
       Vector3  angular
 
-This tells you that the ``/turtlesim`` node is expecting a message with two vectors, ``linear`` and ``angular``, of three elements each.
+This tells you that the ``/turtlebot3_node`` node is expecting a message with two vectors, ``linear`` and ``angular``, of three elements each.
 If you recall the data we saw ``/teleop_keyboard`` passing to ``/turtlebot3_node`` with the ``echo`` command, it’s in the same structure:
 
 .. code-block:: console
 
   linear:
-    x: 0.01
+    x: 0.0
     y: 0.0
     z: 0.0
   angular:
@@ -248,7 +250,7 @@ So, to get the turtle to keep moving, you can run:
 
   ros2 topic pub --rate 60 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"
 
-The difference here is the addition of the ``--rate 1`` option, which tells ``ros2 topic pub`` to publish the command in a steady stream at 1 Hz.
+The difference here is the addition of the ``--rate 60`` option, which tells ``ros2 topic pub`` to publish the command in a steady stream at 1 Hz.
 
 You can refresh rqt_graph to see what’s happening graphically.
 You will see the ``ros 2 topic pub ...`` node (``/_ros2cli_3045``) is publishing over the ``/cmd_vel`` topic, and is being received by both the ``ros2 topic echo ...`` node (``/_ros2cli_ 3033``) and the ``/turtlebot3_node`` node now.
@@ -271,7 +273,7 @@ It will return data on the rate at which the ``/teleop_keyboard`` node is publis
   average rate: 9.879
 	min: 0.101s max: 0.102s std dev: 0.00042s window: 11
 
-Recall that you set the rate of ``/cmd_vel`` to publish at a steady 1 Hz using ``ros2 topic pub --rate 1``.
+Recall that you set the rate of ``/cmd_vel`` to publish at a steady 60 Hz using ``ros2 topic pub --rate 60``.
 The average is displayed reflecting the rate specified by the ``rate`` option.
 
 9 Clean up
