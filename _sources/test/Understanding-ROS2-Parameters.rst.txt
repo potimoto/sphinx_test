@@ -98,7 +98,7 @@ Let’s find out the current value of ``/controller_server``’s parameter ``Fol
 
 .. code-block:: console
 
-    ros2 param get /controller_server FollowPath.max_speed_xy
+    ros2 param get /controller_server FollowPath.max_vel_x
 
 Which will return the value:
 
@@ -106,7 +106,7 @@ Which will return the value:
 
     Double value is: 0.22
 
-Now you know ``FollowPath.max_speed_xy`` holds an double value.
+Now you know ``FollowPath.max_vel_x`` holds an double value.
 
 4 ros2 param set
 ^^^^^^^^^^^^^^^^
@@ -121,7 +121,7 @@ Let’s change ``/controller_server``’s Max speed:
 
 .. code-block:: console
 
-    ros2 param set /controller_server FollowPath.max_speed_xy 0.05
+    ros2 param set /controller_server FollowPath.max_vel_x 0.05
 
 Your terminal should return the message:
 
@@ -166,9 +166,8 @@ If you open this file, you’ll see the following contents:
     ros__parameters:
       FollowPath:
         ...
-        max_speed_xy: 0.05
+        max_vel_x: 0.05
         ...
-        use_sim_time: true
 
 Dumping parameters comes in handy if you want to reload the node with the same parameters in the future.
 

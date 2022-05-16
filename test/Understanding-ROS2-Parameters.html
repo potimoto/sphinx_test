@@ -7,6 +7,7 @@
   <title>Understanding ROS 2 parameters &mdash; ros2-tutorial-using-turtlebot3 1.0.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,6 +16,8 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -166,14 +169,14 @@ For more background on parameters, please see <a class="reference external" href
 </pre></div>
 </div>
 <p>Let’s find out the current value of <code class="docutils literal notranslate"><span class="pre">/controller_server</span></code>’s parameter <code class="docutils literal notranslate"><span class="pre">FollowPath.max_speed_xy</span></code>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 param get /controller_server FollowPath.max_speed_xy</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 param get /controller_server FollowPath.max_vel_x</span>
 </pre></div>
 </div>
 <p>Which will return the value:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Double value is: 0.22</span>
 </pre></div>
 </div>
-<p>Now you know <code class="docutils literal notranslate"><span class="pre">FollowPath.max_speed_xy</span></code> holds an double value.</p>
+<p>Now you know <code class="docutils literal notranslate"><span class="pre">FollowPath.max_vel_x</span></code> holds an double value.</p>
 </section>
 <section id="ros2-param-set">
 <h3><a class="toc-backref" href="#id7">4 ros2 param set</a><a class="headerlink" href="#ros2-param-set" title="Permalink to this headline">¶</a></h3>
@@ -182,7 +185,7 @@ For more background on parameters, please see <a class="reference external" href
 </pre></div>
 </div>
 <p>Let’s change <code class="docutils literal notranslate"><span class="pre">/controller_server</span></code>’s Max speed:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 param set /controller_server FollowPath.max_speed_xy 0.05</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 param set /controller_server FollowPath.max_vel_x 0.05</span>
 </pre></div>
 </div>
 <p>Your terminal should return the message:</p>
@@ -214,9 +217,8 @@ If you open this file, you’ll see the following contents:</p>
   <span class="nt">ros__parameters</span><span class="p">:</span>
     <span class="nt">FollowPath</span><span class="p">:</span>
       <span class="l l-Scalar l-Scalar-Plain">...</span>
-      <span class="l l-Scalar l-Scalar-Plain">max_speed_xy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0.05</span>
+      <span class="l l-Scalar l-Scalar-Plain">max_vel_x</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0.05</span>
       <span class="l l-Scalar l-Scalar-Plain">...</span>
-      <span class="nt">use_sim_time</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
 <p>Dumping parameters comes in handy if you want to reload the node with the same parameters in the future.</p>

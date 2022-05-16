@@ -314,6 +314,8 @@ Now let’s send an action goal from the command line with the following syntax:
 
 ``<values>`` need to be in YAML format.
 
+Before inputting commands, make sure there are no obstacles placed that the robot should not hit.
+
 Keep an eye on the turtlebot3, and enter the following command into your terminal:
 
 .. code-block:: console
@@ -350,14 +352,12 @@ The following message will appear in the terminal and turtlebot3 will start runn
 
 All goals have a unique ID, shown in the return message.
 
-To see the feedback of this goal, add ``--feedback`` to the last command you ran.
-First, make sure you change the value of ``theta``.
-After running the previous command, the turtle will already be at the orientation of ``1.57`` radians, so it won’t move unless you pass a new ``theta``.
+To see the feedback of this goal, add ``--feedback`` to the last command you run.
+The robot should be at the coordinates specified in the last command, so change the coordinates and then execute the command with the ``--feedback``.
 
 .. code-block:: console
 
-  ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose "pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}"
- --feedback
+  ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose "pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}" --feedback
 
 Your terminal will return the message:
 

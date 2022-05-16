@@ -7,6 +7,7 @@
   <title>Understanding ROS 2 actions &mdash; ros2-tutorial-using-turtlebot3 1.0.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,6 +16,8 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -356,6 +359,7 @@ The last section is the structure of the feedback.</p>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">&lt;values&gt;</span></code> need to be in YAML format.</p>
+<p>Before inputting commands, make sure there are no obstacles placed that the robot should not hit.</p>
 <p>Keep an eye on the turtlebot3, and enter the following command into your terminal:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose &quot;pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}&quot;</span>
 </pre></div>
@@ -387,11 +391,9 @@ The last section is the structure of the feedback.</p>
 </pre></div>
 </div>
 <p>All goals have a unique ID, shown in the return message.</p>
-<p>To see the feedback of this goal, add <code class="docutils literal notranslate"><span class="pre">--feedback</span></code> to the last command you ran.
-First, make sure you change the value of <code class="docutils literal notranslate"><span class="pre">theta</span></code>.
-After running the previous command, the turtle will already be at the orientation of <code class="docutils literal notranslate"><span class="pre">1.57</span></code> radians, so it won’t move unless you pass a new <code class="docutils literal notranslate"><span class="pre">theta</span></code>.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose &quot;pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}&quot;</span>
-<span class="go">--feedback</span>
+<p>To see the feedback of this goal, add <code class="docutils literal notranslate"><span class="pre">--feedback</span></code> to the last command you run.
+The robot should be at the coordinates specified in the last command, so change the coordinates and then execute the command with the <code class="docutils literal notranslate"><span class="pre">--feedback</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose &quot;pose: {pose: {position: {x: 2, y: 0, z: 0}, orientation: {x: 0, y: 0, w: 1, z: 0}}}&quot; --feedback</span>
 </pre></div>
 </div>
 <p>Your terminal will return the message:</p>

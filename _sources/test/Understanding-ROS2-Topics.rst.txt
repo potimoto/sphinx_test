@@ -134,7 +134,7 @@ Watch the terminal where your ``echo`` is running at the same time, and you’ll
 .. code-block:: console
 
   linear:
-    x: 0.0
+    x: 0.01
     y: 0.0
     z: 0.0
   angular:
@@ -207,7 +207,7 @@ If you recall the data we saw ``/teleop_keyboard`` passing to ``/turtlebot3_node
 .. code-block:: console
 
   linear:
-    x: 0.0
+    x: 0.01
     y: 0.0
     z: 0.0
   angular:

@@ -7,6 +7,7 @@
   <title>Understanding ROS 2 topics &mdash; ros2-tutorial-using-turtlebot3 1.0.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,6 +16,8 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -194,7 +197,7 @@ That’s because it’s waiting for <code class="docutils literal notranslate"><
 <p>Return to the terminal where <code class="docutils literal notranslate"><span class="pre">teleop_keyboard</span></code> is running and use the arrows to move the turtle around.
 Watch the terminal where your <code class="docutils literal notranslate"><span class="pre">echo</span></code> is running at the same time, and you’ll see position data being published for every movement you make:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">linear:</span>
-<span class="go">  x: 0.0</span>
+<span class="go">  x: 0.01</span>
 <span class="go">  y: 0.0</span>
 <span class="go">  z: 0.0</span>
 <span class="go">angular:</span>
@@ -248,7 +251,7 @@ Recall that the <code class="docutils literal notranslate"><span class="pre">cmd
 <p>This tells you that the <code class="docutils literal notranslate"><span class="pre">/turtlebot3_node</span></code> node is expecting a message with two vectors, <code class="docutils literal notranslate"><span class="pre">linear</span></code> and <code class="docutils literal notranslate"><span class="pre">angular</span></code>, of three elements each.
 If you recall the data we saw <code class="docutils literal notranslate"><span class="pre">/teleop_keyboard</span></code> passing to <code class="docutils literal notranslate"><span class="pre">/turtlebot3_node</span></code> with the <code class="docutils literal notranslate"><span class="pre">echo</span></code> command, it’s in the same structure:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">linear:</span>
-<span class="go">  x: 0.0</span>
+<span class="go">  x: 0.01</span>
 <span class="go">  y: 0.0</span>
 <span class="go">  z: 0.0</span>
 <span class="go">angular:</span>
