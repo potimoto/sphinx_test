@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Understanding ROS 2 nodes &mdash; ros2-tutorial-using-turtlebot3 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ros2-tutorial-using-turtlebot3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Understanding-ROS2-Nodes.html">Understanding ROS 2 nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Understanding-ROS2-Topics.html">Understanding ROS 2 topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Understanding-ROS2-Services.html">Understanding ROS 2 services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Understanding-ROS2-Parameters.html">Understanding ROS 2 parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Understanding-ROS2-Actions.html">Understanding ROS 2 actions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ros2-tutorial-using-turtlebot3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Understanding ROS 2 nodes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/test/tutorial_copy/Understanding-ROS2-Nodes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="understanding-ros-2-nodes">
+<span id="ros2nodes"></span><h1>Understanding ROS 2 nodes<a class="headerlink" href="#understanding-ros-2-nodes" title="Permalink to this headline">¶</a></h1>
+<p><strong>Goal:</strong> Learn about the function of nodes in ROS 2, and the tools to interact with them.</p>
+<p><strong>Tutorial level:</strong> Beginner</p>
+<p><strong>Time:</strong> 10 minutes</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#background" id="id1">Background</a></p>
+<ul>
+<li><p><a class="reference internal" href="#the-ros-2-graph" id="id2">1 The ROS 2 graph</a></p></li>
+<li><p><a class="reference internal" href="#nodes-in-ros-2" id="id3">2 Nodes in ROS 2</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#prerequisites" id="id4">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#tasks" id="id5">Tasks</a></p>
+<ul>
+<li><p><a class="reference internal" href="#ros2-run" id="id6">1 ros2 run</a></p></li>
+<li><p><a class="reference internal" href="#ros2-node-list" id="id7">2 ros2 node list</a></p></li>
+<li><p><a class="reference internal" href="#ros2-node-info" id="id8">3 ros2 node info</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#summary" id="id9">Summary</a></p></li>
+<li><p><a class="reference internal" href="#next-steps" id="id10">Next steps</a></p></li>
+<li><p><a class="reference internal" href="#related-content" id="id11">Related content</a></p></li>
+</ul>
+</div>
+<section id="background">
+<h2><a class="toc-backref" href="#id1">Background</a><a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<section id="the-ros-2-graph">
+<h3><a class="toc-backref" href="#id2">1 The ROS 2 graph</a><a class="headerlink" href="#the-ros-2-graph" title="Permalink to this headline">¶</a></h3>
+<p>Over the next few tutorials, you will learn about a series of core ROS 2 concepts that make up what is referred to as the “ROS (2) graph”.</p>
+<p>The ROS graph is a network of ROS 2 elements processing data together at one time.
+It encompasses all executables and the connections between them if you were to map them all out and visualize them.</p>
+</section>
+<section id="nodes-in-ros-2">
+<h3><a class="toc-backref" href="#id3">2 Nodes in ROS 2</a><a class="headerlink" href="#nodes-in-ros-2" title="Permalink to this headline">¶</a></h3>
+<p>Each node in ROS should be responsible for a single, module purpose (e.g. one node for controlling wheel motors, one node for controlling a laser range-finder, etc).
+Each node can send and receive data to other nodes via topics, services, actions, or parameters.</p>
+<img alt="../../_images/Nodes-TopicandService1.gif" src="../../_images/Nodes-TopicandService1.gif" />
+<p>A full robotic system is comprised of many nodes working in concert.
+In ROS 2, a single executable (C++ program, Python program, etc.) can contain one or more nodes.</p>
+</section>
+</section>
+<section id="prerequisites">
+<h2><a class="toc-backref" href="#id4">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>To learn this tutorial, you will need to complete the <a class="reference external" href="https://emanual.robotis.com/docs/en/platform/turtlebot3/quick-start">setup of turtlebot3</a>.</p>
+<p>As always, don’t forget to source ROS 2 in <a class="reference external" href="https://docs.ros.org/en/foxy/Tutorials/Configuring-ROS2-Environment.html">every new terminal you open</a>.</p>
+<p>In addition, do not forget to run <a class="reference external" href="https://emanual.robotis.com/docs/en/platform/turtlebot3/bringup">bringup</a> on Raspberry Pi.</p>
+</section>
+<section id="tasks">
+<h2><a class="toc-backref" href="#id5">Tasks</a><a class="headerlink" href="#tasks" title="Permalink to this headline">¶</a></h2>
+<section id="ros2-run">
+<h3><a class="toc-backref" href="#id6">1 ros2 run</a><a class="headerlink" href="#ros2-run" title="Permalink to this headline">¶</a></h3>
+<p>The command <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">run</span></code> launches an executable from a package.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 run &lt;package_name&gt; &lt;executable_name&gt;</span>
+</pre></div>
+</div>
+<p>To run turtlebot3 teleoperation, open a new terminal, and enter the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 run turtlebot3_teleop teleop_keyboard</span>
+</pre></div>
+</div>
+<p>A teleoperation form will appear in the terminal window.</p>
+<p>Here, the package name is <code class="docutils literal notranslate"><span class="pre">turtlebot3_teleop</span></code> and the executable name is <code class="docutils literal notranslate"><span class="pre">teleop_keyboard</span></code>.</p>
+<p>There may be multiple executables in the same package.</p>
+<p>We still don’t know the node name, however.
+You can find node names by using <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">node</span> <span class="pre">list</span></code></p>
+</section>
+<section id="ros2-node-list">
+<h3><a class="toc-backref" href="#id7">2 ros2 node list</a><a class="headerlink" href="#ros2-node-list" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">node</span> <span class="pre">list</span></code> will show you the names of all running nodes.
+This is especially useful when you want to interact with a node, or when you have a system running many nodes and need to keep track of them.</p>
+<p>Open a new terminal while turtlebot3_teleop is still running in the other one, and enter the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 node list</span>
+</pre></div>
+</div>
+<p>The terminal will return the node name:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/diff_drive_controller</span>
+<span class="go">/hlds_laser_publisher</span>
+<span class="go">/robot_state_publisher</span>
+<span class="go">/teleop_keyboard</span>
+<span class="go">/turtlebot3_node</span>
+</pre></div>
+</div>
+<section id="remapping">
+<h4>2.1 Remapping<a class="headerlink" href="#remapping" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="https://design.ros2.org/articles/ros_command_line_arguments.html#name-remapping-rules">Remapping</a> allows you to reassign default node properties, like node name, topic names, service names, etc., to custom values.</p>
+<p>Now, lets reassign the name of our <code class="docutils literal notranslate"><span class="pre">/teleop_keyboard</span></code> node.
+In a new terminal, run the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 run turtlebot3_teleop teleop_keyboard --ros-args --remap __node:=my_turtlebot3_teleop</span>
+</pre></div>
+</div>
+<p>Since you’re calling <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">run</span></code> on turtlebot3_teleop again, another teleoperation window will open.
+However, now if you return to the terminal where you ran <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">node</span> <span class="pre">list</span></code>, and run it again, you will see six node names:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/diff_drive_controller</span>
+<span class="go">/hlds_laser_publisher</span>
+<span class="go">/my_turtlebot3_teleop</span>
+<span class="go">/robot_state_publisher</span>
+<span class="go">/teleop_keyboard</span>
+<span class="go">/turtlebot3_node</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="ros2-node-info">
+<h3><a class="toc-backref" href="#id8">3 ros2 node info</a><a class="headerlink" href="#ros2-node-info" title="Permalink to this headline">¶</a></h3>
+<p>Now that you know the names of your nodes, you can access more information about them with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 node info &lt;node_name&gt;</span>
+</pre></div>
+</div>
+<p>To examine your turtlebot3 node, <code class="docutils literal notranslate"><span class="pre">turtlebot3_node</span></code>, run the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 node info /turtlebot3_node</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">node</span> <span class="pre">info</span></code> returns a list of subscribers, publishers, services, and actions (the ROS graph connections) that interact with that node.
+The output should look like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/turtlebot3_node</span>
+<span class="go">Subscribers:</span>
+<span class="go">  /cmd_vel: geometry_msgs/msg/Twist</span>
+<span class="go">  /parameter_events: rcl_interfaces/msg/ParameterEvent</span>
+<span class="go">Publishers:</span>
+<span class="go">  /battery_state: sensor_msgs/msg/BatteryState</span>
+<span class="go">  /imu: sensor_msgs/msg/Imu</span>
+<span class="go">  /joint_states: sensor_msgs/msg/JointState</span>
+<span class="go">  /magnetic_field: sensor_msgs/msg/MagneticField</span>
+<span class="go">  /parameter_events: rcl_interfaces/msg/ParameterEvent</span>
+<span class="go">  /rosout: rcl_interfaces/msg/Log</span>
+<span class="go">  /sensor_state: turtlebot3_msgs/msg/SensorState</span>
+<span class="go">Service Servers:</span>
+<span class="go">  /motor_power: std_srvs/srv/SetBool</span>
+<span class="go">  /reset: std_srvs/srv/Trigger</span>
+<span class="go">  /sound: turtlebot3_msgs/srv/Sound</span>
+<span class="go">  /turtlebot3_node/describe_parameters: rcl_interfaces/srv/DescribeParameters</span>
+<span class="go">  /turtlebot3_node/get_parameter_types: rcl_interfaces/srv/GetParameterTypes</span>
+<span class="go">  /turtlebot3_node/get_parameters: rcl_interfaces/srv/GetParameters</span>
+<span class="go">  /turtlebot3_node/list_parameters: rcl_interfaces/srv/ListParameters</span>
+<span class="go">  /turtlebot3_node/set_parameters: rcl_interfaces/srv/SetParameters</span>
+<span class="go">  /turtlebot3_node/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically</span>
+<span class="go">Service Clients:</span>
+<span class="go">  /turtlebot3_node/describe_parameters: rcl_interfaces/srv/DescribeParameters</span>
+<span class="go">  /turtlebot3_node/get_parameter_types: rcl_interfaces/srv/GetParameterTypes</span>
+<span class="go">  /turtlebot3_node/get_parameters: rcl_interfaces/srv/GetParameters</span>
+<span class="go">  /turtlebot3_node/list_parameters: rcl_interfaces/srv/ListParameters</span>
+<span class="go">  /turtlebot3_node/set_parameters: rcl_interfaces/srv/SetParameters</span>
+<span class="go">  /turtlebot3_node/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically</span>
+<span class="go">Action Servers:</span>
+
+<span class="go">Action Clients:</span>
+</pre></div>
+</div>
+<p>Now try running the same command on the <code class="docutils literal notranslate"><span class="pre">/teleop_keyboard</span></code> node, and see how its connections differ from <code class="docutils literal notranslate"><span class="pre">turtlebot3_node</span></code>.</p>
+<p>You will learn more about the ROS graph connection concepts including the message types in the upcoming tutorials.</p>
+</section>
+</section>
+<section id="summary">
+<h2><a class="toc-backref" href="#id9">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>A node is a fundamental ROS 2 element that serves a single, modular purpose in a robotics system.</p>
+<p>In this tutorial, you utilized nodes created from the <code class="docutils literal notranslate"><span class="pre">turtlebot3_teleop</span></code> package by running the executables <code class="docutils literal notranslate"><span class="pre">teleop_keyboard</span></code>.</p>
+<p>You learned how to use <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">node</span> <span class="pre">list</span></code> to discover active node names and <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">node</span> <span class="pre">info</span></code> to introspect on a single node.
+These tools are vital to understanding the flow of data in a complex, real-world robot system.</p>
+</section>
+<section id="next-steps">
+<h2><a class="toc-backref" href="#id10">Next steps</a><a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>Now that you understand nodes in ROS 2, you can move on to the <a class="reference internal" href="Understanding-ROS2-Topics.html"><span class="doc">topics tutorial</span></a>.
+Topics are one of the communication types that connects nodes.</p>
+</section>
+<section id="related-content">
+<h2><a class="toc-backref" href="#id11">Related content</a><a class="headerlink" href="#related-content" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://docs.ros.org/en/foxy/Concepts.html">Concepts</a> page adds some more detail to the concept of nodes.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, taki.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

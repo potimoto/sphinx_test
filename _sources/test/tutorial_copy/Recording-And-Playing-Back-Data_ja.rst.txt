@@ -1,0 +1,266 @@
+.. _ROS2Bag:
+
+データの記録と再生
+===============
+
+**目標:** トピックにpublishされたデータを記録して、いつでも再生できるようにします。
+
+**チュートリアルレベル:** 初心者
+
+**時間:** 10分
+
+.. contents:: Contents
+   :depth: 2
+   :local:
+
+バックグラウンド
+--------------
+
+``ros2 bag`` は、システムのトピックにpublishされたデータを記録するためのコマンドラインツールです。
+任意の数のトピックで渡されたデータを蓄積し、データベースに保存します。
+その後、データを再生して、テストと実験の結果を再現できます。
+トピックを記録することは、あなたの作業を共有し、他の人がそれを再現できるようにするための素晴らしい方法でもあります。
+
+
+前提条件
+--------
+
+.. note::
+
+  より高性能なバージョンのrosbag2を必要とするROS2Foxyのユーザーについては、`rosbag2のfoxy-futureブランチ <https://github.com/ros2/rosbag2/tree/foxy-future>`_を参照してください。
+  これは公式にサポートされているブランチであり、Galacticバージョンに近く、パフォーマンスの向上と機能が追加されていますが、FoxyリリースとのAPI互換性はありません。
+  Foxyでこのチュートリアルを始めたばかりのユーザーの場合、これを無視してデフォルトのインストールに進むことができます。
+
+通常のROS2セットアップの一部として ``ros2 bag`` をインストールする必要があります。
+
+Linux上のDebiansからインストールし、システムがコマンドを認識しない場合は、次のようにインストールします。
+
+.. code-block:: console
+
+  sudo apt-get install ros- {DISTRO} -ros2bag \
+                       ros-{DISTRO}-rosbag2-converter-default-plugins \
+                       ros-{DISTRO}-rosbag2-storage-default-plugins
+
+また，turtlebot3の`セットアップ<https://emanual.robotis.com/docs/en/platform/turtlebot3/quick-start>`__を完了している必要があります．
+
+このチュートリアルでは、:doc:`nodes <../Understanding-ROS2-Nodes>` や:doc:`topics <../Topics/Understanding-ROS2-Topics>` など、以前のチュートリアルで取り上げた概念について説明します。
+
+いつものように、:doc:`<../Configure-ROS2-Environment>`を開いたすべての新しいターミナルでROS2を調達することを忘れないでください。
+
+
+タスク
+-----
+
+1 セットアップ
+^^^^^^^
+後で保存して再生するために、キーボード入力を ``turtlebot3`` アプリケーションに記録するので、 ``/turtlebot3_bringup`` と ``/teleop_keyboard`` ノードを起動することから始めます。
+
+新しいターミナルを開いて実行します。
+
+.. code-block:: console
+
+    エクスポートTURTLEBOT3_MODEL=burger
+    ros2 launch turtlebot3_bringup robot.launch.py
+
+別のターミナルを開いて実行します。
+
+.. code-block:: console
+
+    ros2 run turtlebot3_teleop teleop_keyboard
+
+同様に、保存した録音を保存するための新しいディレクトリも作成しましょう。
+
+.. code-block:: console
+
+  mkdir bag_files
+  cd bag_files
+
+2 トピックの選択
+^^^^^^^^^^^^^^^^
+
+``ros2 bag`` は、でpublishされているトピックのデータのみを記録できます。
+システムのトピックのリストを表示するには、新しいターミナルを開いて次のコマンドを実行します。
+
+.. code-block:: console
+
+  ros2 topic list
+
+以下のように返されますか:
+
+.. code-block:: console
+
+  /battery_state
+  /cmd_vel
+  /imu
+  ...
+
+トピックのチュートリアルでは、 ``/turtle_teleop`` ノードが ``/turtle1/cmd_vel`` トピックに関するコマンドをpublishして、カメをturtlesimで移動させることを学びました。
+
+``/cmd_vel`` にpublishされているデータを確認するには、次のコマンドを実行します。
+
+.. code-block:: console
+
+  ros2 topic echo /cmd_vel
+
+Teleopによってデータがpublishされていないため、最初は何も表示されません。
+``/teleop_keyboard`` を実行したターミナルに戻り、アクティブになるように選択します。
+矢印キーを使用してturtlebot3を移動すると、 ``ros2 topic echo`` を実行している端末でpublishされているデータが表示されます。
+
+.. code-block:: console
+
+  linear:
+    x:2.0
+    y:0.0
+    z:0.0
+  angular:
+    x:0.0
+    y:0.0
+    z:0.0
+    ---
+
+
+
+3 ros2 bag record
+^^^^^^^^^^^^^^^^^
+
+トピックにpublishされたデータを記録するには、次のコマンドを使用します。
+
+.. code-block:: console
+
+    ros2 bag record <topic_name>
+
+選択したトピックでこのコマンドを実行する前に、新しいターミナルを開き、前に作成した ``bag_files`` ディレクトリに移動します。これは、rosbagファイルが実行したディレクトリに保存されるためです。
+
+次のコマンドを実行します。
+
+.. code-block:: console
+
+    ros2 bag record /cmd_vel
+
+ターミナルに次のメッセージが表示されます（日付と時刻は異なります）。
+
+.. code-block:: console
+
+    [INFO] [rosbag2_storage]: Opened database 'rosbag2_2019_10_11-05_18_45'.
+    [INFO] [rosbag2_transport]: Listening for topics...
+    [INFO] [rosbag2_transport]: Subscribed to topic '/cmd_vel'
+    [INFO] [rosbag2_transport]: All requested topics are subscribed. Stopping discovery...
+
+現在、 ``ros2 bag`` は、 ``/cmd_vel`` トピックにpublishされたデータを記録しています。
+teleopターミナルに戻り、turtlebot3を再び動かします。
+動きは重要ではありませんが、後でデータを再生するときに確認できるパターンを作成してみてください。
+
+``Ctrl+C`` を押して記録を停止します。
+
+データは、 ``rosbag2_year_month_day-hour_minute_second`` のパターンの名前を持つバッグファイルに蓄積されます。
+
+3.1 複数のトピックを記録する
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+複数のトピックを記録したり、 ``ros2bag`` が保存するファイルの名前を変更したりすることもできます。
+
+次のコマンドを実行します。
+
+.. code-block:: console
+
+  ros2 bag record -o subset /cmd_vel /odom
+
+``-o`` オプションを使用すると、バッグファイルの一意の名前を指定できます。
+次の文字列（この場合は ``subset`` ）はファイル名です。
+
+一度に複数のトピックを記録するには、各トピックをスペースで区切って並べる必要があります。
+
+両方のトピックが記録されていることを確認する，次のメッセージが表示されます。
+
+.. code-block:: console
+
+    [INFO] [rosbag2_storage]: Opened database 'subset'.
+    [INFO] [rosbag2_transport]: Listening for topics...
+    [INFO] [rosbag2_transport]: Subscribed to topic '/cmd_vel'
+    [INFO] [rosbag2_transport]: Subscribed to topic '/odom'
+    [INFO] [rosbag2_transport]: All requested topics are subscribed. Stopping discovery...
+
+turtlebot3を動かして、終了したら ``Ctrl+C`` を押すことで記録を停止できます。
+
+.. note::
+
+    コマンドに追加できる別のオプション ``-a`` があります。これは、システム上のすべてのトピックを記録します。
+
+4ros2 bag info
+^^^^^^^^^^^^^^^
+
+次のコマンドを実行すると、記録の詳細を確認できます。
+
+.. code-block:: console
+
+    ros2 bag info <bag_file_name>
+
+``subset`` バッグファイルでこのコマンドを実行すると、ファイルに関する情報のリストが返されます:
+
+.. code-block:: console
+
+    ros2 bag info subset
+
+.. code-block:: console
+(仮)
+  ファイル:subset.db3
+  バッグサイズ:228.5 KiB
+  ストレージID:sqlite3
+  持続時間:48.47秒
+  開始:2019年10月11日06:09:09.12（1570799349.12）
+  2019年10月11日終了06:09:57.60（1570799397.60）
+  メッセージ:3013
+  トピック情報:トピック:/ cmd_vel | タイプ:geometry_msgs / msg / Twist | カウント:9 | シリアル化形式:cdr
+                   トピック:/ odom | タイプ:turtlesim / msg / Pose | カウント:3004 | シリアル化形式:cdr
+
+個々のメッセージを表示するには、データベース（この場合はsqlite3）を開いて調べる必要がありますが、これはROS2のスコープを外れています。
+
+5 ros2 bag play
+^^^^^^^^^^^^^^^
+
+バッグファイルを再生する前に、teleopが実行されているターミナルで ``Ctrl+C`` と入力します。
+次に、turtlebot3アプリケーションが実行されていることを確認して、バッグファイルの動作を確認します。
+
+次のコマンドを入力します。
+
+.. code-block:: console
+
+    ros2 bag play subset
+
+端末は次のメッセージを返します。
+
+.. code-block:: console
+
+    [INFO] [rosbag2_storage]:データベース'subset'を開きました。
+
+turtlebot3は、記録中に入力したのと同じパスをたどります（ただし、100％正確ではありません）。
+
+``subset`` ファイルには ``/turtle1/pose`` トピックが記録されているため、移動していなくても、turtlesimを実行している限り、 ``ros2 bag play`` コマンドは終了しません。
+
+これは、 `` / turtlesim`` ノードがアクティブである限り、 ``/turtle1/pose`` トピックに関するデータを定期的にpublishするためです。
+上記の ``ros2 bag info`` の例の結果で、「/ turtle1/cmd_vel」トピックの「Count」情報がわずか9であることに気付いたかもしれません。これは、記録中に矢印キーを押した回数です。
+
+``/turtle1/pose`` の ``Count`` 値は3000を超えていることに注意してください。記録中に、そのトピックに関するデータが3000回publishされました。
+
+加速度データがpublishされる頻度を知るには、次のコマンドを実行できます。
+
+.. code-block:: console
+
+    ros2 topic hz /cmd_vel
+
+概要
+-------
+
+``ros2 bag`` コマンドを使用して、ROS2システムのトピックに渡されたデータを記録できます。
+自分の仕事を他の人と共有している場合でも、自分の実験を内省している場合でも、知っておくとよいツールです。
+
+次のステップ
+----------
+
+次のステップは、:doc: `../Workspace/Creating-A-Workspace`で始まる「初心者:クライアントライブラリ」チュートリアルに取り組むことです。
+
+関連性のあるコンテンツ
+---------------
+
+``ros2 bag`` のより詳細な説明は、`README<https://github.com/ros2/rosbag2>`__にあります。
+QoSの互換性と ``ros2bag`` の詳細については、:doc: `../../ How-To-Guides /Overriding-QoS-Policies-For-Recording-And-Playback`を参照してください。
