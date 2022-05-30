@@ -271,7 +271,7 @@ If you recall the data we saw <code class="docutils literal notranslate"><span c
 <p>The <code class="docutils literal notranslate"><span class="pre">'&lt;args&gt;'</span></code> argument is the actual data you’ll pass to the topic, in the structure you just discovered in the previous section.</p>
 <p>It’s important to note that this argument needs to be input in YAML syntax.
 Input the full command like so:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 topic pub /cmd_vel geometry_msgs/msg/Twist &quot;{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}&quot;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 topic pub /cmd_vel geometry_msgs/msg/Twist &quot;{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.0}}&quot;</span>
 </pre></div>
 </div>
 <p>You will receive the following message in the terminal:</p>
