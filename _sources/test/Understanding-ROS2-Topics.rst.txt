@@ -250,7 +250,7 @@ So, to get the turtle to keep moving, you can run:
 
   ros2 topic pub --rate 60 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"
 
-The difference here is the addition of the ``--rate 60`` option, which tells ``ros2 topic pub`` to publish the command in a steady stream at 1 Hz.
+The difference here is the addition of the ``--rate 60`` option, which tells ``ros2 topic pub`` to publish the command in a steady stream at 60 Hz.
 
 You can refresh rqt_graph to see what’s happening graphically.
 You will see the ``ros 2 topic pub ...`` node (``/_ros2cli_3045``) is publishing over the ``/cmd_vel`` topic, and is being received by both the ``ros2 topic echo ...`` node (``/_ros2cli_ 3033``) and the ``/turtlebot3_node`` node now.
