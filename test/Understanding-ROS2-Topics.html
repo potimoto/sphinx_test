@@ -280,12 +280,13 @@ Input the full command like so:</p>
 </pre></div>
 </div>
 <p>And you will see your turtlebot3 move as it spin like so.</p>
-<p>The turtle (and commonly the real robots which it is meant to emulate) require a steady stream of commands to operate continuously.
-So, to get the turtle to keep moving, you can run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 topic pub --rate 60 /cmd_vel geometry_msgs/msg/Twist &quot;{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.0}}&quot;</span>
+<p>You can also specify how often you want to publish data to a topic.
+With the <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span> <span class="pre">pub</span></code> command still running, you can open a new terminal and execute the following commands:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ros2 topic pub --rate 0.5 /cmd_vel geometry_msgs/msg/Twist &quot;{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}&quot;</span>
 </pre></div>
 </div>
-<p>The difference here is the addition of the <code class="docutils literal notranslate"><span class="pre">--rate</span> <span class="pre">60</span></code> option, which tells <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span> <span class="pre">pub</span></code> to publish the command in a steady stream at 60 Hz.</p>
+<p>Once every two seconds, turtlebot3 stops spinning.</p>
+<p>The difference here is the addition of the <code class="docutils literal notranslate"><span class="pre">--rate</span> <span class="pre">0.5</span></code> option, which tells <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span> <span class="pre">pub</span></code> to publish the command in a steady stream at 0.5 Hz.</p>
 <p>You can refresh rqt_graph to see what’s happening graphically.
 You will see the <code class="docutils literal notranslate"><span class="pre">ros</span> <span class="pre">2</span> <span class="pre">topic</span> <span class="pre">pub</span> <span class="pre">...</span></code> node (<code class="docutils literal notranslate"><span class="pre">/_ros2cli_3045</span></code>) is publishing over the <code class="docutils literal notranslate"><span class="pre">/cmd_vel</span></code> topic, and is being received by both the <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span> <span class="pre">echo</span> <span class="pre">...</span></code> node (<code class="docutils literal notranslate"><span class="pre">/_ros2cli_</span> <span class="pre">3033</span></code>) and the <code class="docutils literal notranslate"><span class="pre">/turtlebot3_node</span></code> node now.</p>
 <img alt="../_images/rqt_graph2.png" src="../_images/rqt_graph2.png" />
@@ -297,11 +298,11 @@ You will see the <code class="docutils literal notranslate"><span class="pre">ro
 </pre></div>
 </div>
 <p>It will return data on the rate at which the <code class="docutils literal notranslate"><span class="pre">/teleop_keyboard</span></code> node is publishing data to the <code class="docutils literal notranslate"><span class="pre">cmd_vel</span></code> topic.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">average rate: 9.879</span>
-<span class="go">      min: 0.101s max: 0.102s std dev: 0.00042s window: 11</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">average rate: 0.500</span>
+<span class="go">      min: 1.999s max: 2.001s std dev: 0.00047s window: 7</span>
 </pre></div>
 </div>
-<p>Recall that you set the rate of <code class="docutils literal notranslate"><span class="pre">/cmd_vel</span></code> to publish at a steady 60 Hz using <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span> <span class="pre">pub</span> <span class="pre">--rate</span> <span class="pre">60</span></code>.
+<p>Recall that you set the rate of <code class="docutils literal notranslate"><span class="pre">/cmd_vel</span></code> to publish at a steady 0.5 Hz using <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span> <span class="pre">pub</span> <span class="pre">--rate</span> <span class="pre">0.5</span></code>.
 The average is displayed reflecting the rate specified by the <code class="docutils literal notranslate"><span class="pre">rate</span></code> option.</p>
 </section>
 <section id="clean-up">

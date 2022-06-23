@@ -243,14 +243,16 @@ You will receive the following message in the terminal:
 
 And you will see your turtlebot3 move as it spin like so.
 
-The turtle (and commonly the real robots which it is meant to emulate) require a steady stream of commands to operate continuously.
-So, to get the turtle to keep moving, you can run:
+You can also specify how often you want to publish data to a topic. 
+With the ``ros2 topic pub`` command still running, you can open a new terminal and execute the following commands:
 
 .. code-block:: console
 
-  ros2 topic pub --rate 60 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.0}}"
+  ros2 topic pub --rate 0.5 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
 
-The difference here is the addition of the ``--rate 60`` option, which tells ``ros2 topic pub`` to publish the command in a steady stream at 60 Hz.
+Once every two seconds, turtlebot3 stops spinning.
+
+The difference here is the addition of the ``--rate 0.5`` option, which tells ``ros2 topic pub`` to publish the command in a steady stream at 0.5 Hz.
 
 You can refresh rqt_graph to see what’s happening graphically.
 You will see the ``ros 2 topic pub ...`` node (``/_ros2cli_3045``) is publishing over the ``/cmd_vel`` topic, and is being received by both the ``ros2 topic echo ...`` node (``/_ros2cli_ 3033``) and the ``/turtlebot3_node`` node now.
@@ -270,10 +272,10 @@ It will return data on the rate at which the ``/teleop_keyboard`` node is publis
 
 .. code-block:: console
 
-  average rate: 9.879
-	min: 0.101s max: 0.102s std dev: 0.00042s window: 11
+  average rate: 0.500
+	min: 1.999s max: 2.001s std dev: 0.00047s window: 7
 
-Recall that you set the rate of ``/cmd_vel`` to publish at a steady 60 Hz using ``ros2 topic pub --rate 60``.
+Recall that you set the rate of ``/cmd_vel`` to publish at a steady 0.5 Hz using ``ros2 topic pub --rate 0.5``.
 The average is displayed reflecting the rate specified by the ``rate`` option.
 
 9 Clean up
